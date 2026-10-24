@@ -6,6 +6,22 @@ backend:
 media_folder: public/uploads
 public_folder: /uploads
 
+media_libraries:
+  all:
+    slugify_filename: true
+    transformations:
+      raster_image:
+        format: webp
+        quality: 85
+        width: 2400
+        height: 2400
+  cloudflare_r2:
+    access_key_id: 76014da3f9895a8c0c18b5f36b9bc43f
+    bucket: portfolio-media
+    account_id: de4ad1f63675338c4e3c78f5db779cdb
+    public_url: https://pub-XXXXXXXX.r2.dev
+    prefix: uploads/
+
 collections:
   - name: writing
     label: Writing
