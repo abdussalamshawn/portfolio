@@ -1,29 +1,17 @@
 backend:
   name: github
-  repo: YOUR-GITHUB-USERNAME/portfolio
+  repo: abdussalamshawn/portfolio
   branch: main
 
-media_libraries:
-  cloudflare_r2:
-    access_key_id: YOUR_R2_ACCESS_KEY_ID
-    bucket: your-media-bucket
-    account_id: YOUR_CLOUDFLARE_ACCOUNT_ID
-    public_url: https://pub-XXXXXXXX.r2.dev
-    prefix: cms-uploads/
+media_folder: public/uploads
+public_folder: /uploads
 
 collections:
-  - name: posts
+  - name: writing
     label: Writing
-    folder: src/content/posts
+    folder: src/data/writing
     create: true
+    extension: md
     fields:
       - { label: Title, name: title, widget: string }
-      - { label: Body, name: body, widget: markdown }
-
-  - name: gallery
-    label: Photos
-    folder: src/content/gallery
-    create: true
-    fields:
-      - { label: Title, name: title, widget: string }
-      - { label: Image, name: image, widget: image }
+      - { label: Text, name: body, widget: markdown }
