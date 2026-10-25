@@ -1,0 +1,11 @@
+---
+const { items, base, small = false } = Astro.props;
+---
+<div class:list={['grid', { small }]}>
+  {items.map((item) => (
+    <a class='card' href={`${base}${item.slug}/`}>
+      <img src={item.cover} alt='' loading='lazy' />
+      <span>{item.title}</span>
+    </a>
+  ))}
+</div>
