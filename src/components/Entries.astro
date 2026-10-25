@@ -1,0 +1,17 @@
+---
+import { fmtDate } from '../lib/content.js';
+const { items } = Astro.props;
+const link = (p) =>
+  p.externalUrl
+    ? { href: p.externalUrl, target: '_blank', rel: 'noopener' }
+    : { href: `/writing/${p.slug}/` };
+---
+<ul class='entries'>
+  {items.map((p) => (
+    <li>
+      <h3><a {...link(p)}>{p.title}</a></h3>
+      <p class='meta'>{[p.type, p.publication, fmtDate(p.date)].filter(Boolean).join(' · ')}</p>
+      {p.description && <p>{p.description}</p>}
+    </li>
+  ))}
+</ul>
