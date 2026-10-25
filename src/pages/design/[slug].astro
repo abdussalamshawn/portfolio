@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import { design, fmtDate } from '../../lib/content.js';
+
+export function getStaticPaths() {
+  return design().map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const { Content } = project;
+const images = [project.cover, ...(project.images ?? [])].filter(Boolean);
+---
+<Base title={project.title}>
+  <p class='meta'>{[project.discipline, project.client, fmtDate(project.date, { year: 'numeric' })].filter(Boolean).join(' · ')}</p>
+  <h1>{project.title}</h1>
+  <div class='prose'><Content /></div>
+  <div class='stack'>
+    {images.map((src, i) => <img src={src} alt={`${project.title}, image ${i + 1}`} loading={i === 0 ? 'eager' : 'lazy'} />)}
+  </div>
+  <p><a href='/design/'>← All design</a></p>
+</Base>
