@@ -1,0 +1,9 @@
+---
+import Base from '../../layouts/Base.astro';
+import Entries from '../../components/Entries.astro';
+import { writing } from '../../lib/content.js';
+---
+<Base title='Writing'>
+  <h1>Writing</h1>
+  <Entries items={writing()} />
+</Base>
