@@ -1,0 +1,22 @@
+---
+import Base from '../../layouts/Base.astro';
+import { writing, fmtDate } from '../../lib/content.js';
+
+export function getStaticPaths() {
+  return writing()
+    .filter((piece) => !piece.externalUrl)
+    .map((piece) => ({ params: { slug: piece.slug }, props: { piece } }));
+}
+
+const { piece } = Astro.props;
+const { Content } = piece;
+---
+<Base title={piece.title} description={piece.description}>
+  <article class='prose'>
+    <p class='meta'>{[piece.type, fmtDate(piece.date)].filter(Boolean).join(' · ')}</p>
+    <h1>{piece.title}</h1>
+    {piece.cover && <img class='cover' src={piece.cover} alt='' />}
+    <Content />
+  </article>
+  <p><a href='/writing/'>← All writing</a></p>
+</Base>
