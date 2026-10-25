@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+import * as about from '../data/pages/about.md';
+
+const { Content, frontmatter } = about;
+---
+<Base title={frontmatter.title ?? 'About'}>
+  <h1>{frontmatter.title ?? 'About'}</h1>
+  {frontmatter.portrait && <img class='portrait' src={frontmatter.portrait} alt='' />}
+  <div class='prose'><Content /></div>
+</Base>
