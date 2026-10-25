@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import { photography, fmtDate } from '../../lib/content.js';
+
+export function getStaticPaths() {
+  return photography().map((series) => ({ params: { slug: series.slug }, props: { series } }));
+}
+
+const { series } = Astro.props;
+const { Content } = series;
+const photos = series.photos ?? [];
+---
+<Base title={series.title} description={series.subtitle}>
+  <p class='meta'>{[series.subtitle, fmtDate(series.date, { year: 'numeric' })].filter(Boolean).join(' · ')}</p>
+  <h1>{series.title}</h1>
+  <div class='prose'><Content /></div>
+  <div class='gallery'>
+    {photos.map((src, i) => (
+      <a href={src}>
+        <img src={src} alt={`${series.title}, photo ${i + 1}`} loading={i < 2 ? 'eager' : 'lazy'} />
+      </a>
+    ))}
+  </div>
+  <p><a href='/photography/'>← All photography</a></p>
+</Base>
