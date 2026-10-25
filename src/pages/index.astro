@@ -1,11 +1,36 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Base from '../layouts/Base.astro';
+import Entries from '../components/Entries.astro';
+import Grid from '../components/Grid.astro';
+import site from '../data/site.json';
+import { writing, photography, design, featuredFirst } from '../lib/content.js';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const pieces = featuredFirst(writing(), 4);
+const series = featuredFirst(photography(), 6);
+const projects = featuredFirst(design(), 3);
 ---
+<Base>
+  <section>
+    <h1>{site.name}</h1>
+    <p class='lede'>{site.intro}</p>
+  </section>
 
-<Layout>
-	<Welcome />
-</Layout>
+  <section class='block'>
+    <div class='block-head'><h2>Writing</h2><a href='/writing/'>All writing →</a></div>
+    <Entries items={pieces} />
+  </section>
+
+  {series.length > 0 && (
+    <section class='block'>
+      <div class='block-head'><h2>Photography</h2><a href='/photography/'>All series →</a></div>
+      <Grid items={series} base='/photography/' />
+    </section>
+  )}
+
+  {projects.length > 0 && (
+    <section class='block'>
+      <div class='block-head'><h2>Design</h2><a href='/design/'>All projects →</a></div>
+      <Grid items={projects} base='/design/' small />
+    </section>
+  )}
+</Base>
