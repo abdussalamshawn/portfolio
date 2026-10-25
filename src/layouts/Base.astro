@@ -1,0 +1,38 @@
+---
+import '../styles/global.css';
+import site from '../data/site.json';
+
+const { title, description = site.tagline } = Astro.props;
+const pageTitle = title ? `${title} | ${site.name}` : site.name;
+const path = Astro.url.pathname;
+const menu = [
+  { href: '/writing/', label: 'Writing' },
+  { href: '/photography/', label: 'Photography' },
+  { href: '/design/', label: 'Design' },
+  { href: '/about/', label: 'About' },
+];
+---
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <title>{pageTitle}</title>
+    <meta name='description' content={description} />
+  </head>
+  <body>
+    <header class='site-header'>
+      <a class='brand' href='/'>{site.name}</a>
+      <nav>
+        {menu.map((item) => (
+          <a href={item.href} aria-current={path.startsWith(item.href) ? 'page' : undefined}>{item.label}</a>
+        ))}
+      </nav>
+    </header>
+    <main><slot /></main>
+    <footer class='site-footer'>
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+      {site.instagram && <> · <a href={site.instagram}>Instagram</a></>}
+    </footer>
+  </body>
+</html>
