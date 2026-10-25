@@ -23,11 +23,77 @@ media_libraries:
     prefix: uploads/
 
 collections:
+site_url: https://portfolio-r91.pages.dev
+
+output:
+  omit_empty_optional_fields: true
+
+collections:
   - name: writing
     label: Writing
+    label_singular: Piece
     folder: src/data/writing
     create: true
     extension: md
     fields:
       - { label: Title, name: title, widget: string }
-      - { label: Text, name: body, widget: markdown }
+      - { label: Date, name: date, widget: datetime, type: date }
+      - { label: Type, name: type, widget: select, options: [Essay, Fiction, Poetry, Journalism, Other], default: Essay }
+      - { label: Short description, name: description, widget: text, required: false }
+      - { label: Feature on home page, name: featured, widget: boolean, default: false }
+      - { label: Published in (outlet), name: publication, widget: string, required: false }
+      - { label: Link to the published piece, name: externalUrl, widget: string, required: false }
+      - { label: Cover image, name: cover, widget: image, required: false }
+      - { label: Text, name: body, widget: markdown, required: false }
+
+  - name: photography
+    label: Photography
+    label_singular: Series
+    folder: src/data/photography
+    create: true
+    extension: md
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime, type: date }
+      - { label: Place or subtitle, name: subtitle, widget: string, required: false }
+      - { label: Feature on home page, name: featured, widget: boolean, default: false }
+      - { label: Cover image, name: cover, widget: image }
+      - { label: Photos, name: photos, widget: image, multiple: true }
+      - { label: Notes on the series, name: body, widget: markdown, required: false }
+
+  - name: design
+    label: Design
+    label_singular: Project
+    folder: src/data/design
+    create: true
+    extension: md
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime, type: date }
+      - { label: Discipline, name: discipline, widget: select, options: [Branding, Editorial, Poster, Packaging, Illustration, Web, Other], default: Branding }
+      - { label: Client or context, name: client, widget: string, required: false }
+      - { label: Feature on home page, name: featured, widget: boolean, default: false }
+      - { label: Cover image, name: cover, widget: image }
+      - { label: More images, name: images, widget: image, multiple: true, required: false }
+      - { label: Case study, name: body, widget: markdown, required: false }
+
+  - name: pages
+    label: Pages and settings
+    delete: false
+    files:
+      - name: site
+        label: Site settings
+        file: src/data/site.json
+        fields:
+          - { label: Your name, name: name, widget: string }
+          - { label: Tagline, name: tagline, widget: string }
+          - { label: Home page intro, name: intro, widget: text }
+          - { label: Email, name: email, widget: string }
+          - { label: Instagram link, name: instagram, widget: string, required: false }
+      - name: about
+        label: About page
+        file: src/data/pages/about.md
+        fields:
+          - { label: Title, name: title, widget: string, default: About }
+          - { label: Portrait, name: portrait, widget: image, required: false }
+          - { label: Text, name: body, widget: markdown }
