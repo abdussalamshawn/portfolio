@@ -22,9 +22,6 @@ media_libraries:
     public_url: https://pub-93172cac377747d889b120cc0814a3a2.r2.dev
     prefix: uploads/
 
-collections:
-site_url: https://portfolio-r91.pages.dev
-
 output:
   omit_empty_optional_fields: true
 
