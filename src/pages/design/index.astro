@@ -1,0 +1,9 @@
+---
+import Base from '../../layouts/Base.astro';
+import Grid from '../../components/Grid.astro';
+import { design } from '../../lib/content.js';
+---
+<Base title='Design'>
+  <h1>Design</h1>
+  <Grid items={design()} base='/design/' />
+</Base>
