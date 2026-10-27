@@ -8,6 +8,7 @@ photos:
   - https://media.abdussalam.me/uploads/dsc08554.webp
   - https://media.abdussalam.me/uploads/dsc07660-2.webp
   - https://media.abdussalam.me/uploads/dsc00119.webp
+  - https://media.abdussalam.me/uploads/dsc08345.webp
 ---
 
 I conducted many shoots and did all the post-production work.
