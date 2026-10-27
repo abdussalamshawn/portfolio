@@ -6,5 +6,5 @@ description: Bangladesh is now nearer than ever to joining the global trend of s
 featured: true
 publication: The Daily Star
 externalUrl: https://www.thedailystar.net/toggle/news/the-road-electric-future-2182711
-cover: /uploads/pasted-image-1793073941861.webp
+cover: https://media.abdussalam.me/uploads/tlectric-car.webp
 ---
