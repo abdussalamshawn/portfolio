@@ -6,5 +6,5 @@ description: It is a work environment where you are your boss; you work as much 
 featured: false
 publication: The Daily Star
 externalUrl: https://www.thedailystar.net/toggle/news/struggles-being-freelancer-bangladesh-2078253
-cover: /uploads/pasted-image-1793073318865.webp
+cover: https://media.abdussalam.me/uploads/ltop.webp
 ---
