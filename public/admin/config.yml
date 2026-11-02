@@ -42,7 +42,7 @@ collections:
       - { label: Feature on home page, name: featured, widget: boolean, default: false }
       - { label: Published in (outlet), name: publication, widget: string, required: false }
       - { label: Link to the published piece, name: externalUrl, widget: string, required: false }
-      - { label: Cover image, name: cover, widget: image, required: false }
+      - { label: Cover image, name: cover, widget: image, required: false, media_libraries: { default: false } }
       - { label: Text, name: body, widget: markdown, required: false }
 
   - name: photography
@@ -56,8 +56,14 @@ collections:
       - { label: Date, name: date, widget: datetime, type: date }
       - { label: Place or subtitle, name: subtitle, widget: string, required: false }
       - { label: Feature on home page, name: featured, widget: boolean, default: false }
-      - { label: Cover image, name: cover, widget: image }
-      - { label: Photos, name: photos, widget: image, multiple: true }
+      - { label: Cover image, name: cover, widget: image, media_libraries: { default: false } }
+      - label: Photos
+        name: photos
+        widget: list
+        label_singular: Photo
+        fields:
+          - { label: Photo, name: image, widget: image, media_libraries: { default: false } }
+          - { label: Caption, name: caption, widget: string, required: false }
       - { label: Notes on the series, name: body, widget: markdown, required: false }
 
   - name: design
@@ -72,8 +78,8 @@ collections:
       - { label: Discipline, name: discipline, widget: select, options: [Branding, Editorial, Poster, Packaging, Illustration, Web, Other], default: Branding }
       - { label: Client or context, name: client, widget: string, required: false }
       - { label: Feature on home page, name: featured, widget: boolean, default: false }
-      - { label: Cover image, name: cover, widget: image }
-      - { label: More images, name: images, widget: image, multiple: true, required: false }
+      - { label: Cover image, name: cover, widget: image, media_libraries: { default: false } }
+      - { label: More images, name: images, widget: image, multiple: true, required: false, media_libraries: { default: false } }
       - { label: Case study, name: body, widget: markdown, required: false }
 
   - name: pages
@@ -88,11 +94,11 @@ collections:
           - { label: Tagline, name: tagline, widget: string }
           - { label: Home page intro, name: intro, widget: text }
           - { label: Email, name: email, widget: string }
-          - { label: Instagram link, name: instagram, widget: string, required: false }
+          - { label: LinkedIn link, name: linkedin, widget: string, required: false }
       - name: about
         label: About page
         file: src/data/pages/about.md
         fields:
           - { label: Title, name: title, widget: string, default: About }
-          - { label: Portrait, name: portrait, widget: image, required: false }
+          - { label: Portrait, name: portrait, widget: image, required: false, media_libraries: { default: false } }
           - { label: Text, name: body, widget: markdown }
