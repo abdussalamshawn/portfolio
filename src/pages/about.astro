@@ -1,11 +1,17 @@
 ---
 import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
 import * as about from '../data/pages/about.md';
 
 const { Content, frontmatter } = about;
+const heading = frontmatter.title ?? 'About';
 ---
-<Base title={frontmatter.title ?? 'About'}>
-  <h1>{frontmatter.title ?? 'About'}</h1>
-  {frontmatter.portrait && <img class='portrait' src={frontmatter.portrait} alt='' />}
-  <div class='prose'><Content /></div>
+<Base title={heading}>
+  <h1>{heading}</h1>
+  <div class='about'>
+    {frontmatter.portrait && (
+      <img class='portrait' src={frontmatter.portrait} alt={`Portrait of ${site.name}`} />
+    )}
+    <div class='prose'><Content /></div>
+  </div>
 </Base>
