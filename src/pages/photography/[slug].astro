@@ -8,18 +8,66 @@ export function getStaticPaths() {
 
 const { series } = Astro.props;
 const { Content } = series;
-const photos = series.photos ?? [];
+const photos = (series.photos ?? [])
+  .map((p) => (typeof p === 'string' ? { image: p } : p))
+  .filter((p) => p && p.image);
 ---
 <Base title={series.title} description={series.subtitle}>
   <p class='meta'>{[series.subtitle, fmtDate(series.date, { year: 'numeric' })].filter(Boolean).join(' · ')}</p>
   <h1>{series.title}</h1>
   <div class='prose'><Content /></div>
+
   <div class='gallery'>
-    {photos.map((src, i) => (
-      <a href={src}>
-        <img src={src} alt={`${series.title}, photo ${i + 1}`} loading={i < 2 ? 'eager' : 'lazy'} />
-      </a>
+    {photos.map((p, i) => (
+      <figure>
+        <button type='button' class='open' data-index={i} aria-label={`View photo ${i + 1} larger`}>
+          <img src={p.image} alt={p.caption || `${series.title}, photo ${i + 1}`} loading={i < 2 ? 'eager' : 'lazy'} />
+        </button>
+        {p.caption && <figcaption>{p.caption}</figcaption>}
+      </figure>
     ))}
   </div>
+
+  <dialog id='lightbox' aria-label='Photo viewer'>
+    <button type='button' class='lb-close' aria-label='Close'>×</button>
+    <button type='button' class='lb-prev' aria-label='Previous photo'>‹</button>
+    <figure>
+      <img id='lb-image' alt='' />
+      <figcaption id='lb-caption'></figcaption>
+    </figure>
+    <button type='button' class='lb-next' aria-label='Next photo'>›</button>
+  </dialog>
+
   <p><a href='/photography/'>← All photography</a></p>
+
+  <script define:vars={{ photos }}>
+    const box = document.getElementById('lightbox');
+    const big = document.getElementById('lb-image');
+    const text = document.getElementById('lb-caption');
+    let current = 0;
+
+    function show(i) {
+      current = (i + photos.length) % photos.length;
+      big.src = photos[current].image;
+      big.alt = photos[current].caption || '';
+      text.textContent = photos[current].caption || '';
+    }
+
+    document.querySelectorAll('.open').forEach((button) => {
+      button.addEventListener('click', () => {
+        show(Number(button.dataset.index));
+        box.showModal();
+      });
+    });
+    box.querySelector('.lb-close').addEventListener('click', () => box.close());
+    box.querySelector('.lb-prev').addEventListener('click', () => show(current - 1));
+    box.querySelector('.lb-next').addEventListener('click', () => show(current + 1));
+    box.addEventListener('click', (event) => {
+      if (event.target === box) box.close();
+    });
+    box.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') show(current - 1);
+      if (event.key === 'ArrowRight') show(current + 1);
+    });
+  </script>
 </Base>
