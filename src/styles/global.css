@@ -66,3 +66,15 @@ body:has(dialog[open]) { overflow: hidden; }
 .about { display: grid; gap: 2rem; align-items: start; }
 @media (min-width: 760px) { .about { grid-template-columns: 16rem 1fr; } }
 .about .portrait { width: 100%; max-width: 16rem; margin: 0; }
+
+
+/* Series and project cards */
+.card { display: block; text-decoration: none; }
+.card span { display: block; }
+.card-title { font: 600 1rem var(--sans); }
+.card-sub { margin-top: 0.15rem; color: var(--muted); font: 0.85rem var(--sans); }
+.card-meta { margin-top: 0.15rem; color: var(--text); font: 0.9rem var(--sans); }
+.card:hover .card-title, .card:focus-visible .card-title { text-decoration: underline; }
+.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.grid.large { grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr)); gap: 1.5rem; }
+.grid.large .card img { aspect-ratio: 3 / 2; }
