@@ -1,11 +1,23 @@
 ---
-const { items, base, small = false } = Astro.props;
+const { items, base, small = false, large = false } = Astro.props;
+const isPhotos = base.startsWith('/photography');
+
+const photoCount = (item) =>
+  (item.photos ?? []).filter((p) => (typeof p === 'string' ? p : p && p.image)).length;
+
+const cards = items.map((item) => {
+  const n = photoCount(item);
+  const meta = isPhotos ? `${n} ${n === 1 ? 'photo' : 'photos'} →` : (item.discipline ?? '');
+  return { slug: item.slug, title: item.title, cover: item.cover, subtitle: item.subtitle, meta };
+});
 ---
-<div class:list={['grid', { small }]}>
-  {items.map((item) => (
-    <a class='card' href={`${base}${item.slug}/`}>
-      <img src={item.cover} alt='' loading='lazy' />
-      <span>{item.title}</span>
+<div class:list={['grid', { small, large }]}>
+  {cards.map((card) => (
+    <a class='card' href={`${base}${card.slug}/`}>
+      <img src={card.cover} alt='' loading='lazy' decoding='async' />
+      <span class='card-title'>{card.title}</span>
+      {large && card.subtitle && <span class='card-sub'>{card.subtitle}</span>}
+      {card.meta && <span class='card-meta'>{card.meta}</span>}
     </a>
   ))}
 </div>
