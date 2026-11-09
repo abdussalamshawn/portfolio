@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { photography, fmtDate } from '../../lib/content.js';
+import { resized } from '../../lib/images.js';
 
 export function getStaticPaths() {
   return photography().map((series) => ({ params: { slug: series.slug }, props: { series } }));
@@ -11,6 +12,8 @@ const { Content } = series;
 const photos = (series.photos ?? [])
   .map((p) => (typeof p === 'string' ? { image: p } : p))
   .filter((p) => p && p.image);
+const galleryWidths = [640, 1000];
+const gallerySizes = '(min-width: 900px) 320px, 100vw';
 ---
 <Base title={series.title} description={series.subtitle}>
   <p class='meta'>{[series.subtitle, fmtDate(series.date, { year: 'numeric' })].filter(Boolean).join(' · ')}</p>
@@ -21,7 +24,7 @@ const photos = (series.photos ?? [])
     {photos.map((p, i) => (
       <figure>
         <button type='button' class='open' data-index={i} aria-label={`View photo ${i + 1} larger`}>
-          <img src={p.image} alt={p.caption || `${series.title}, photo ${i + 1}`} loading={i < 2 ? 'eager' : 'lazy'} />
+          <img {...resized(p.image, galleryWidths, gallerySizes)} alt={p.caption || `${series.title}, photo ${i + 1}`} loading={i < 2 ? 'eager' : 'lazy'} />
         </button>
         {p.caption && <figcaption>{p.caption}</figcaption>}
       </figure>
