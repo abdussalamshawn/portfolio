@@ -1,6 +1,15 @@
 ---
+import { resized } from '../lib/images.js';
+
 const { items, base, small = false, large = false } = Astro.props;
 const isPhotos = base.startsWith('/photography');
+
+const widths = large ? [640, 1000] : small ? [400, 640] : [480, 800];
+const sizes = large
+  ? '(min-width: 600px) 50vw, 100vw'
+  : small
+    ? '(min-width: 760px) 240px, 50vw'
+    : '(min-width: 760px) 320px, 100vw';
 
 const photoCount = (item) =>
   (item.photos ?? []).filter((p) => (typeof p === 'string' ? p : p && p.image)).length;
@@ -14,7 +23,7 @@ const cards = items.map((item) => {
 <div class:list={['grid', { small, large }]}>
   {cards.map((card) => (
     <a class='card' href={`${base}${card.slug}/`}>
-      <img src={card.cover} alt='' loading='lazy' decoding='async' />
+      <img {...resized(card.cover, widths, sizes)} alt='' loading='lazy' decoding='async' />
       <span class='card-title'>{card.title}</span>
       {large && card.subtitle && <span class='card-sub'>{card.subtitle}</span>}
       {card.meta && <span class='card-meta'>{card.meta}</span>}
