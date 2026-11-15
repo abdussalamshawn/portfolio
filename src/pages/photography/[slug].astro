@@ -1,7 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { photography, fmtDate } from '../../lib/content.js';
-import { resized } from '../../lib/images.js';
+import { wallImage } from '../../lib/images.js';
+import { sizeOf } from '../../lib/sizes.js';
 
 export function getStaticPaths() {
   return photography().map((series) => ({ params: { slug: series.slug }, props: { series } }));
@@ -9,27 +10,42 @@ export function getStaticPaths() {
 
 const { series } = Astro.props;
 const { Content } = series;
-const photos = (series.photos ?? [])
+const sizeNames = ['small', 'regular', 'large'];
+const list = (series.photos ?? [])
   .map((p) => (typeof p === 'string' ? { image: p } : p))
   .filter((p) => p && p.image);
-const galleryWidths = [640, 1000];
-const gallerySizes = '(min-width: 900px) 320px, 100vw';
+const photos = await Promise.all(
+  list.map(async (p, i) => ({
+    i,
+    image: p.image,
+    caption: p.caption,
+    size: sizeNames.includes(p.size) ? p.size : 'regular',
+    dims: await sizeOf(p.image),
+  })),
+);
+const layouts = [2, 3];
 ---
 <Base title={series.title} description={series.subtitle}>
   <p class='meta'>{[series.subtitle, fmtDate(series.date, { year: 'numeric' })].filter(Boolean).join(' · ')}</p>
   <h1>{series.title}</h1>
   <div class='prose'><Content /></div>
 
-  <div class='gallery'>
-    {photos.map((p, i) => (
-      <figure>
-        <button type='button' class='open' data-index={i} aria-label={`View photo ${i + 1} larger`}>
-          <img {...resized(p.image, galleryWidths, gallerySizes)} alt={p.caption || `${series.title}, photo ${i + 1}`} loading={i < 2 ? 'eager' : 'lazy'} />
-        </button>
-        {p.caption && <figcaption>{p.caption}</figcaption>}
-      </figure>
-    ))}
-  </div>
+  {layouts.map((cols) => (
+    <div class={`wall wall-${cols}`}>
+      {Array.from({ length: cols }, (_, c) => (
+        <div class='col'>
+          {photos.filter((p) => p.i % cols === c).map((p) => (
+            <figure class={`tile size-${p.size}`}>
+              <button type='button' class='open' data-index={p.i} aria-label={`View photo ${p.i + 1} larger`}>
+                <img {...wallImage(p.image, p.size, cols)} width={p.dims?.width} height={p.dims?.height} alt={p.caption || `${series.title}, photo ${p.i + 1}`} loading='lazy' decoding='async' />
+              </button>
+              {p.caption && <figcaption>{p.caption}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      ))}
+    </div>
+  ))}
 
   <dialog id='lightbox' aria-label='Photo viewer'>
     <button type='button' class='lb-close' aria-label='Close'>×</button>
