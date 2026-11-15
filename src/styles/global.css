@@ -137,3 +137,24 @@ button, input, select, textarea { font-family: var(--sans); font-weight: 500; }
 .site-header nav a, .meta, .block-head a, .card-sub, .gallery figcaption, .site-footer { color: var(--ui-color); }
 .site-header nav a:hover { color: var(--text); }
 #lightbox figcaption { font-family: var(--sans); font-weight: 500; font-size: 0.875rem; color: #aaa69e; }
+
+/* Photo walls: photos fill the rows left to right, 2 columns on phones and 3 on wide screens */
+.wall { display: flex; align-items: flex-start; gap: 0.75rem; margin-top: 2rem; }
+.wall .col { flex: 1 1 0; min-width: 0; }
+.wall-3 { display: none; }
+@media (min-width: 900px) {
+  .wall-2 { display: none; }
+  .wall-3 { display: flex; gap: 1rem; }
+}
+.wall .tile { display: block; width: var(--w, 90%); margin: 0 auto 1.75rem; text-decoration: none; }
+.wall .tile span { display: block; }
+.size-small { --w: 75%; }
+.size-regular { --w: 90%; }
+.size-large { --w: 100%; }
+@media (min-width: 900px) { .size-small { --w: 65%; } .size-regular { --w: 85%; } }
+.wall img { display: block; width: 100%; height: auto; }
+.wall .open { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+.wall figcaption { margin-top: 0.4rem; font-family: var(--sans); font-weight: 500; font-size: 0.875rem; line-height: 1.4; color: var(--ui-color); }
+.wall .card-title { margin-top: 0.5rem; }
+.wall .tile:hover .card-title, .wall .tile:focus-visible .card-title { text-decoration: underline; }
+.wall .tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
