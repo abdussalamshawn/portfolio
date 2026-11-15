@@ -1,32 +1,59 @@
 ---
-import { resized } from '../lib/images.js';
+import { resized, wallImage } from '../lib/images.js';
+import { sizeOf } from '../lib/sizes.js';
 
 const { items, base, small = false, large = false } = Astro.props;
 const isPhotos = base.startsWith('/photography');
-
-const widths = large ? [640, 1000] : small ? [400, 640] : [480, 800];
-const sizes = large
-  ? '(min-width: 600px) 50vw, 100vw'
-  : small
-    ? '(min-width: 760px) 240px, 50vw'
-    : '(min-width: 760px) 320px, 100vw';
+const sizeNames = ['small', 'regular', 'large'];
 
 const photoCount = (item) =>
   (item.photos ?? []).filter((p) => (typeof p === 'string' ? p : p && p.image)).length;
 
-const cards = items.map((item) => {
-  const n = photoCount(item);
-  const meta = isPhotos ? `${n} ${n === 1 ? 'photo' : 'photos'} →` : (item.discipline ?? '');
-  return { slug: item.slug, title: item.title, cover: item.cover, subtitle: item.subtitle, meta };
-});
+const cards = await Promise.all(
+  items.map(async (item, i) => {
+    const n = photoCount(item);
+    return {
+      i,
+      slug: item.slug,
+      title: item.title,
+      cover: item.cover,
+      subtitle: item.subtitle,
+      size: sizeNames.includes(item.coverSize) ? item.coverSize : 'regular',
+      dims: isPhotos ? await sizeOf(item.cover) : null,
+      meta: isPhotos ? `${n} ${n === 1 ? 'photo' : 'photos'} →` : (item.discipline ?? ''),
+    };
+  }),
+);
+
+const layouts = [2, 3];
+const designWidths = small ? [400, 640] : [480, 800];
+const designSizes = small ? '(min-width: 760px) 240px, 50vw' : '(min-width: 760px) 320px, 100vw';
 ---
-<div class:list={['grid', { small, large }]}>
-  {cards.map((card) => (
-    <a class='card' href={`${base}${card.slug}/`}>
-      <img {...resized(card.cover, widths, sizes)} alt='' loading='lazy' decoding='async' />
-      <span class='card-title'>{card.title}</span>
-      {large && card.subtitle && <span class='card-sub'>{card.subtitle}</span>}
-      {card.meta && <span class='card-meta'>{card.meta}</span>}
-    </a>
-  ))}
-</div>
+{isPhotos ? (
+  layouts.map((cols) => (
+    <div class={`wall wall-${cols}`}>
+      {Array.from({ length: cols }, (_, c) => (
+        <div class='col'>
+          {cards.filter((card) => card.i % cols === c).map((card) => (
+            <a class={`tile size-${card.size}`} href={`${base}${card.slug}/`}>
+              <img {...wallImage(card.cover, card.size, cols)} width={card.dims?.width} height={card.dims?.height} alt='' loading='lazy' decoding='async' />
+              <span class='card-title'>{card.title}</span>
+              {large && card.subtitle && <span class='card-sub'>{card.subtitle}</span>}
+              <span class='card-meta'>{card.meta}</span>
+            </a>
+          ))}
+        </div>
+      ))}
+    </div>
+  ))
+) : (
+  <div class:list={['grid', { small }]}>
+    {cards.map((card) => (
+      <a class='card' href={`${base}${card.slug}/`}>
+        <img {...resized(card.cover, designWidths, designSizes)} alt='' loading='lazy' decoding='async' />
+        <span class='card-title'>{card.title}</span>
+        {card.meta && <span class='card-meta'>{card.meta}</span>}
+      </a>
+    ))}
+  </div>
+)}
