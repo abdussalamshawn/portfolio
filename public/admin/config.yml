@@ -57,6 +57,7 @@ collections:
       - { label: Place or subtitle, name: subtitle, widget: string, required: false }
       - { label: Feature on home page, name: featured, widget: boolean, default: false }
       - { label: Cover image, name: cover, widget: image, media_libraries: { default: false } }
+      - { label: Cover size, name: coverSize, widget: select, options: [{ label: Small, value: small }, { label: Regular, value: regular }, { label: Large, value: large }], default: regular, required: false, dropdown_threshold: 5 }
       - label: Photos
         name: photos
         widget: list
@@ -64,6 +65,7 @@ collections:
         fields:
           - { label: Photo, name: image, widget: image, media_libraries: { default: false } }
           - { label: Caption, name: caption, widget: string, required: false }
+          - { label: Size, name: size, widget: select, options: [{ label: Small, value: small }, { label: Regular, value: regular }, { label: Large, value: large }], default: regular, required: false, dropdown_threshold: 5 }
       - { label: Notes on the series, name: body, widget: markdown, required: false }
 
   - name: design
