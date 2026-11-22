@@ -158,3 +158,24 @@ button, input, select, textarea { font-family: var(--sans); font-weight: 500; }
 .wall .card-title { margin-top: 0.5rem; }
 .wall .tile:hover .card-title, .wall .tile:focus-visible .card-title { text-decoration: underline; }
 .wall .tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+
+/* About page: portrait beside the title on phones, text and links below */
+.about { display: grid; grid-template-columns: clamp(7.5rem, 36vw, 10rem) 1fr; grid-template-areas: 'photo title' 'text text' 'links links'; gap: 1.5rem 1.25rem; align-items: center; }
+.about.no-portrait { grid-template-columns: 1fr; grid-template-areas: 'title' 'text' 'links'; }
+.about h1 { grid-area: title; margin: 0; }
+.about .portrait { grid-area: photo; width: 100%; max-width: none; height: auto; margin: 0; }
+.about .prose { grid-area: text; }
+.about .links { grid-area: links; }
+@media (min-width: 760px) {
+  .about { grid-template-columns: 16rem 1fr; grid-template-areas: 'title title' 'photo text' 'photo links'; gap: 1.5rem 2rem; align-items: start; }
+  .about.no-portrait { grid-template-columns: 1fr; grid-template-areas: 'title' 'text' 'links'; }
+}
+
+/* Links list */
+.links { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); gap: 1.25rem 1.5rem; }
+.link-title { display: block; font: 500 0.75rem var(--sans); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ui-color); }
+.sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* Menu: wrap instead of running off the edge on very narrow phones */
+.site-header nav { flex-wrap: wrap; gap: 0.25rem 1.25rem; }
