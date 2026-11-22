@@ -2,16 +2,56 @@
 import Base from '../layouts/Base.astro';
 import site from '../data/site.json';
 import * as about from '../data/pages/about.md';
+import { resized } from '../lib/images.js';
+import { sizeOf } from '../lib/sizes.js';
 
 const { Content, frontmatter } = about;
 const heading = frontmatter.title ?? 'About';
+const portrait = frontmatter.portrait;
+const dims = await sizeOf(portrait);
+
+const prefixes = ['https://', 'http://', 'mailto:'];
+const startsWith = (url) => prefixes.find((p) => url.toLowerCase().startsWith(p));
+const bare = (url) => {
+  const rest = url.slice((startsWith(url) ?? '').length);
+  return rest.endsWith('/') ? rest.slice(0, -1) : rest;
+};
+
+const links = (frontmatter.links ?? [])
+  .filter((l) => l && typeof l.url === 'string' && startsWith(l.url.trim()))
+  .map((l) => {
+    const url = l.url.trim();
+    const web = url.toLowerCase().startsWith('http');
+    const newTab = web && l.newTab === true;
+    return {
+      title: (l.title ?? '').trim(),
+      url,
+      shown: (l.text ?? '').trim() || bare(url),
+      newTab,
+      attrs: newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {},
+    };
+  });
 ---
 <Base title={heading}>
-  <h1>{heading}</h1>
-  <div class='about'>
-    {frontmatter.portrait && (
-      <img class='portrait' src={frontmatter.portrait} alt={`Portrait of ${site.name}`} />
+  <div class={portrait ? 'about' : 'about no-portrait'}>
+    <h1>{heading}</h1>
+    {portrait && (
+      <img class='portrait' {...resized(portrait, [320, 640], '(min-width: 760px) 256px, min(36vw, 160px)')} width={dims?.width} height={dims?.height} alt={`Portrait of ${site.name}`} decoding='async' />
     )}
     <div class='prose'><Content /></div>
+    {links.length > 0 && (
+      <ul class='links'>
+        {links.map((l) => (
+          <li>
+            {l.title && <span class='link-title'>{l.title}</span>}
+            <a href={l.url} {...l.attrs}>
+              {l.shown}
+              {l.newTab && <span class='sr'> (opens in a new tab)</span>}
+              {l.newTab && <span aria-hidden='true'> ↗</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
   </div>
 </Base>
