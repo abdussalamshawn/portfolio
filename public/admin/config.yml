@@ -104,3 +104,14 @@ collections:
           - { label: Title, name: title, widget: string, default: About }
           - { label: Portrait, name: portrait, widget: image, required: false, media_libraries: { default: false } }
           - { label: Text, name: body, widget: markdown }
+          - label: Links
+            name: links
+            widget: list
+            label_singular: Link
+            summary: '{{fields.title}}'
+            required: false
+            fields:
+              - { label: Title, name: title, widget: string, hint: 'A short label shown above the link, for example LinkedIn.' }
+              - { label: Link text, name: text, widget: string, required: false, hint: 'What visitors click. Leave empty to show the address itself.' }
+              - { label: Address, name: url, widget: string, pattern: ['^(https?://|mailto:)', 'Start with https:// or mailto:'], hint: 'For example https://www.linkedin.com/in/yourname' }
+              - { label: Open in a new tab, name: newTab, widget: boolean, default: false, required: false }
