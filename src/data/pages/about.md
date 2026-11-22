@@ -6,8 +6,8 @@ links:
     text: See my Writeups for The Daily Star
     url: https://www.thedailystar.net/author/abdus-salam-shawn
     newTab: true
-  - title: Second Email
-    text: My Google Mail Address
+  - title: Secondary Email
+    text: abdussalamshawn@gmail.com
     url: mailto:abdussalamshawn@gmail.com
     newTab: false
 ---
